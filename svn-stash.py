@@ -45,6 +45,19 @@ def execute_stash_list(target_file,filename_list):
 	for stash_id in register.stashes:
 		print stash_id
 
+
+def execute_stash_listall(target_file,filename_list):
+	#obtain the list of stashes.
+	#include non current stashes
+	register = svn_stash_register()
+	for stash_id in register.all_stashes:
+		print stash_id,
+		#highlight current stashes
+		if stash_id in register.stashes:
+			print "*"
+		else:
+			print ""
+
 def execute_stash_clear(target_file,filename_list):
 	#delete all stashes.
 	register = svn_stash_register()
@@ -70,6 +83,7 @@ def execute_stash_help(target_file,filename_list):
 	help_content += "svn-stash - Stash the changes in a dirty working directory away\n"
 	help_content += "\n"+ b + "SYNOPSIS" + end_b + "\n"
 	help_content +=	"\tsvn stash list\n"
+	help_content +=	"\tsvn stash listall\n"
 	help_content += "\tsvn stash show\n"
 	help_content += "\tsvn stash push\n"
 	help_content += "\tsvn stash pop\n"
@@ -89,6 +103,8 @@ def execute_svn_stash(command,target_file,filename_list):
 		execute_stash_pop(target_file,filename_list)
 	elif command == "list":
 		execute_stash_list(target_file,filename_list)
+	elif command == "listall":
+		execute_stash_listall(target_file,filename_list)
 	elif command == "clear":
 		execute_stash_clear(target_file,filename_list)
 	elif command == "show":
