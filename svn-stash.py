@@ -99,6 +99,7 @@ def execute_svn_stash(command,target_file,filename_list):
 #obtain the svn status files
 def obtain_svn_status_files():
 	status_files = [] 
+	print "Running svn status, could be slow on large repos"
 	status_list = os.popen('svn st').read()
 	status_list = status_list.split("\n")
 	for line in status_list:
