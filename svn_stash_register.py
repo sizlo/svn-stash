@@ -203,13 +203,20 @@ def create_stash_dir_if_any():
 def print_hr(lng=30):
 	return "\n" + ("-"*lng) + "\n"
 
+# Return true if the stash was created in CURRENT_DIR and CURRENT_DIR is within an svn repo
 def is_a_current_stash(stash_id):
 	stash = svn_stash()
 	stash.load(stash_id)
+
+	if CURRENT_DIR != stash.root_url:
+		return False
+
+	# Make sure CURRENT_DIR is within an svn repo
 	current_dir_parts = CURRENT_DIR.split("/")
-	stash_dir_parts = stash.root_url.split("/")
-	stash_dir_parts = stash_dir_parts[:len(current_dir_parts)]
-	stash_dir = "/".join(stash_dir_parts)
-	if ".svn" in os.listdir(CURRENT_DIR):	
-		return stash_dir == CURRENT_DIR
+	while len(current_dir_parts) > 0:
+		dirToCheck = "/".join(current_dir_parts)
+		if ".svn" in os.listdir(dirToCheck):	
+			return True
+		current_dir_parts = current_dir_parts[:-1]
+
 	return False
